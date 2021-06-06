@@ -1,0 +1,22 @@
+server:
+  port: 9999
+#  servlet:
+#    context-path: /oauth-server
+logging:
+  level:
+    org.springframework.security.web.FilterChainProxy: DEBUG
+    org.springframework.security: DEBUG
+
+spring:
+  application:
+    name: oauth-server
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    spring.thymeleaf.mode: LEGACYHTML5
+#    servlet:
+#      content-type: text/html
+
+
