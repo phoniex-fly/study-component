@@ -1,0 +1,44 @@
+server:
+  port: 8888
+#  servlet:
+#    context-path: /oauth-client
+logging:
+  level:
+    org.springframework.security.web.FilterChainProxy: DEBUG
+    org.springframework.security: DEBUG
+
+spring:
+  application:
+    name: oauth-client
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    mode: LEGACYHTML5
+#    servlet:
+#      content-type: text/html
+
+
+oauth:
+  roles: USER
+  resourceId: gcolServer
+  access_token:
+    validity_period: 7200
+  auth_client:
+    id: gcol
+    secret: secret
+    authorizedGrantTypes: authorization_code
+    authorities: CLIENT
+    scope: user_info
+    gctrainId: GCTrain
+  authorize_uri: /oauth/authorize
+  token_uri: /oauth/token
+  client:
+    accquire_uri: /accquire
+    oauthClient_uri: /oauthClient/comeToOauth
+    redirect_uri: /oauthClient/callBack
+
+
+
+
