@@ -1,21 +1,23 @@
 package com.demo.oauthserver.authorization.config;
 
-import com.demo.oauthserver.resource.web.common.FromLoginConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private HttpServletRequest request;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -39,17 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
 //                .antMatchers("/user**").hasRole("USER")
-                .antMatchers("/login**",FromLoginConstant.LOGIN_PAGE,FromLoginConstant.LOGIN_PROCESSING_URL,"/oauthGrant","/oauthLogin").permitAll()
+                .antMatchers("/login**", "/authentication/require", "/authentication/form", "/oauthGrant", "/oauthLogin", "oauth/authorize").permitAll()
                 .anyRequest().authenticated()
-                .and().formLogin().loginPage(FromLoginConstant.LOGIN_PAGE).loginProcessingUrl(FromLoginConstant.LOGIN_PROCESSING_URL);
-//                .and().formLogin().loginPage("/login").loginProcessingUrl("/login");
-        /*http.antMatcher("/**")
-                .requestMatchers()
-                .antMatchers("/oauth/authorize**", "/login**", "/error**")
                 .and()
-                .authorizeRequests().anyRequest().authenticated()
-                .and()
-                .formLogin().permitAll();*/
+                .formLogin();
+//                .loginPage("/authentication/require")
+//                .loginProcessingUrl("/authentication/form");
+
     }
 
     /**

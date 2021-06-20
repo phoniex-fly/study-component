@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.provider.code.AuthorizationCodeServic
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * 授权服务器
@@ -59,13 +60,13 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
          * 暂时使用内存方式存储客户端详情信息
          */
         clients.inMemory()// 使用in‐memory存储
-                .withClient("myclient")// client_id
+                .withClient("client")// client_id
                 .secret(new BCryptPasswordEncoder().encode("123456"))
 //                .resourceIds("res_01")//资源服务ID
                 .authorizedGrantTypes("authorization_code", "password", "client_credentials", "implicit", "refresh_token")// 该client允许的授权类型 authorization_code,password,refresh_token,implicit,client_credentials
                 .scopes("all")// 允许的授权范围
                 .autoApprove(true)//false为手动授权 true为自动授权
-                .redirectUris("http://www.baidu.com");//加上验证回调地址
+                .redirectUris("http://localhost:18180/oauthServerTest/oauthClient/callBack");//加上验证回调地址
     }
 
     /**

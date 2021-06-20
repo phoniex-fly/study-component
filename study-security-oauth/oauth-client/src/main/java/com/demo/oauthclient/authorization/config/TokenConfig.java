@@ -13,10 +13,12 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
  */
 public class TokenConfig {
 
-    @Autowired
-    private TokenStore tokenStore;
+
     @Autowired
     private ClientDetailsService clientDetailsService;
+
+    @Autowired
+    private TokenStore tokenStore;
 
     /**
      * 令牌配置

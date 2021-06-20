@@ -1,7 +1,6 @@
 package com.demo.oauthserver.authorization.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,8 +12,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 
 /**
  * 授权服务器
@@ -64,7 +61,15 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 //                .resourceIds("res_01")//资源服务ID
                 .authorizedGrantTypes("authorization_code", "password", "client_credentials", "implicit", "refresh_token")// 该client允许的授权类型 authorization_code,password,refresh_token,implicit,client_credentials
                 .scopes("all")// 允许的授权范围
-                .autoApprove(false)//false为手动授权 true为自动授权
+                .autoApprove(true)//false为手动授权 true为自动授权
+                .redirectUris("http://localhost:8888/oauthClient/callBack")//加上验证回调地址
+                .and()
+                .withClient("client_id")// client_id
+                .secret(new BCryptPasswordEncoder().encode("654321"))
+//                .resourceIds("res_01")//资源服务ID
+                .authorizedGrantTypes("authorization_code", "password", "client_credentials", "implicit", "refresh_token")// 该client允许的授权类型 authorization_code,password,refresh_token,implicit,client_credentials
+                .scopes("all")// 允许的授权范围
+                .autoApprove(true)//false为手动授权 true为自动授权
                 .redirectUris("http://www.baidu.com");//加上验证回调地址
     }
 
@@ -80,6 +85,8 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
                 .authorizationCodeServices(authorizationCodeServices)
                 .tokenServices(tokenServices)
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST);
+        // 最后一个参数为替换之后授权页面的url 自定义授权页面
+        endpoints.pathMapping("/oauth/confirm_access", "/custom/confirm_access");
     }
 
 

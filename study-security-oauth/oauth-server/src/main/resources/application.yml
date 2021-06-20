@@ -16,7 +16,7 @@ spring:
     suffix: .html
     cache: false
     spring.thymeleaf.mode: LEGACYHTML5
-#    servlet:
-#      content-type: text/html
+    servlet:
+      content-type: text/html
 
 

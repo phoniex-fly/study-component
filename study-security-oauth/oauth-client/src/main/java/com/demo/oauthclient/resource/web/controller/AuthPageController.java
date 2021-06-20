@@ -1,12 +1,14 @@
-package com.demo.oauthserver.resource.web.controller;
+package com.demo.oauthclient.resource.web.controller;
 
-import com.demo.oauthserver.resource.web.common.ResultModel;
+import com.demo.oauthclient.resource.web.common.ResultModel;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,15 +44,12 @@ public class AuthPageController {
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ResultModel requireAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-//        SavedRequest savedRequest = requestCache.getRequest(request, response);
-//        if (null != savedRequest) {
-//            String targetUrl = savedRequest.getRedirectUrl();
-//            log.info("引发跳转的请求是:" + targetUrl);
-//            redirectStrategy.sendRedirect(request, response, "/oauthLogin");
-//        }
-        String target = request.getRequestURL().toString();
-        log.info("引发跳转的请求是:" + target);
-        response.sendRedirect("/oauthLogin");
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
+        if (null != savedRequest) {
+            String targetUrl = savedRequest.getRedirectUrl();
+            log.info("引发跳转的请求是:" + targetUrl);
+            redirectStrategy.sendRedirect(request, response, "/oauthLogin");
+        }
         //如果访问的是接口资源
         return ResultModel.fail(401, "访问的服务需要身份认证，请引导用户到登录页");
     }
@@ -75,8 +74,7 @@ public class AuthPageController {
      * @return String
      * @throws Exception Exception
      */
-//    @RequestMapping("/oauth/confirm_access") //auth默认
-    @RequestMapping("/custom/confirm_access") //在认证管理器中配置映射地址
+    @RequestMapping("/oauth/confirm_access")
     public String getAccessConfirmation(Map<String, Object> model, HttpServletRequest request) throws Exception {
         @SuppressWarnings("unchecked")
         Map<String, String> scopes = (Map<String, String>) (model.containsKey("scopes") ? model.get("scopes") : request.getAttribute("scopes"));

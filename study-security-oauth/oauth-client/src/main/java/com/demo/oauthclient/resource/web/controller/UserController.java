@@ -12,10 +12,11 @@ public class UserController {
 
     @GetMapping("/me")
 //    @PreAuthorize("hasRole('ROLE_USER')")
-    public UserInfo me(){
+    public UserInfo me() {
         UserInfo info = new UserInfo();
         info.setName("张三");
         info.setEmail("qq");
         return info;
     }
+    
 }
